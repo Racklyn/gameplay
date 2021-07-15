@@ -18,6 +18,7 @@ import { styles } from './styles';
 import { theme } from '../../global/styles/theme';
 
 import { CategorySelector } from '../../components/CategorySelector';
+import { TextIsEmpty } from '../../components/TextIsEmpty';
 import { SmallInput } from '../../components/SmallInput';
 import { Background } from '../../components/Background';
 import { ModalView } from '../../components/ModalView';
@@ -29,9 +30,12 @@ import { Guilds } from '../Guilds';
 
 import { GuildProps } from '../../components/Guild'; //Importando interface
 import { useNavigation } from '@react-navigation/native';
+import { useEffect } from 'react';
 
 
 export function AppointmentCreate() {
+
+    const data = new Date();
 
     const [category, setCategory] = useState('')
     const [openGuildsModal, setOpenGuildsModal] = useState(false)
@@ -39,12 +43,25 @@ export function AppointmentCreate() {
 
     const navigation = useNavigation()
 
-    const [day, setDay] = useState('')
-    const [month, setMonth] = useState('')
-    const [hour, setHour] = useState('')
-    const [minute, setMinute] = useState('')
+    const [day, setDay] = useState(data.getDate().toString())
+    const [month, setMonth] = useState((data.getMonth()+1).toString())
+    const [hour, setHour] = useState(data.getHours().toString())
+    const [minute, setMinute] = useState(data.getMinutes().toString())
     const [description, setDescription] = useState('')
 
+    const [emptyFields, setEmptyFields] = useState({
+        category: false,
+        guild: false,
+    })
+
+    useEffect(()=>{
+        setEmptyFields({...emptyFields, category: false})
+    },[category])
+
+    useEffect(()=>{
+        setEmptyFields({...emptyFields, guild: false})
+    },[guild.id])
+    
     function handleOpenGuilds() {
         setOpenGuildsModal(true)
     }
@@ -57,20 +74,74 @@ export function AppointmentCreate() {
         setCategory(categoryId)
     }
 
+    function onChangeDay(day: string) {
+        if(Number(day)<0){
+            setDay('01')
+        }else if(Number(day)>31){
+            setDay('31')
+        }else{
+            setDay(day)
+        }
+    }
+
+    function onChangeMonth(month: string) {
+        if(Number(month)<0){
+            setMonth('01')
+        }else if(Number(month)>12){
+            setMonth('12')
+        }else{
+            setMonth(month)
+        }
+    }
+
+    function onChangeHour(hour: string) {
+        if(Number(hour)<0){
+            setHour('00')
+        }else if(Number(hour)>23){
+            setHour('23')
+        }else{
+            setHour(hour)
+        }
+    }
+
+    function onChangeMinute(minute: string) {
+        if(Number(minute)<0){
+            setMinute('00')
+        }else if(Number(minute)>59){
+            setMinute('59')
+        }else{
+            setMinute(minute)
+        }
+    }
+
+
+
     async function handleSave() {
 
-        if(day=='' || month=='' || hour=='' || minute=='' || description==''){
-            Alert.alert("Preencha todos os campos!")
+        setEmptyFields({
+            category: emptyFields.category = category==='',
+            guild: emptyFields.guild = guild.id===undefined,
+        })
+
+        // if(Number.isNaN(minute) || Number.isNaN(parseInt(minute))){
+        //     console.log("Oi")
+        //     setMinute('00')
+        // }
+        
+        if(!Object.values(emptyFields).every(e=>!e)){
+            // Alert.alert(`Preencha todos os campos!`)
             return
         }
-
+        
         const newAppointment = {
             id: uuid.v4(),
             guild,
             category,
-            date: `${day}/${month} às ${hour}:${minute}h`,
+            date: `${String(day).padStart(2,'0')}/${String(month).padStart(2,'0')}`
+                +` às ${String(hour).padStart(2,'0')}:${String(minute).padStart(2,'0')}h`,
             description
         }
+        // Alert.alert(`Data: ${newAppointment.date} \n Minute: ${minute}`)
 
         const storage = await AsyncStorage.getItem(COLLECTION_APPOINTMENTS)
         //Verificando se já existe algum appointment salvo localmente
@@ -108,11 +179,12 @@ export function AppointmentCreate() {
                         hasCheckBox
                         setCategory={handleCategorySelected}
                         categorySelected={category}
+                        isEmpty={emptyFields.category}
                     />
 
                     <View style={styles.form}>
                         <RectButton onPress={handleOpenGuilds}>
-                            <View style={styles.select}>
+                            <View style={[styles.select, emptyFields.guild?styles.isEmptyStyle:null]}>
 
                                 {
                                     guild.icon
@@ -133,6 +205,9 @@ export function AppointmentCreate() {
                                 />
 
                             </View>
+
+                            { emptyFields.guild && <TextIsEmpty/>}
+
                         </RectButton>
                     
                         <View style={styles.field}>
@@ -142,13 +217,26 @@ export function AppointmentCreate() {
                                 <View style={styles.column}>
                                     <SmallInput
                                         maxLength={2}
-                                        onChangeText={setDay}    
+                                        onChangeText={onChangeDay}
+                                        value={day}
+                                        onEndEditing={()=>{
+                                            if(Number(day)==0){
+                                                setDay('01')
+                                            }
+                                        }}
                                     />
                                     <Text style={styles.divider}>/</Text>
                                     <SmallInput
                                         maxLength={2}
-                                        onChangeText={setMonth}
+                                        onChangeText={onChangeMonth}
+                                        value={month}
+                                        onEndEditing={()=>{
+                                            if(Number(month)==0){
+                                                setMonth('01')
+                                            }
+                                        }}
                                     />
+
                                 </View>
                             </View>
 
@@ -158,15 +246,30 @@ export function AppointmentCreate() {
                                 <View style={styles.column}>
                                     <SmallInput
                                         maxLength={2}
-                                        onChangeText={setHour}
+                                        onChangeText={onChangeHour}
+                                        value={hour}
+                                        onEndEditing={()=>{
+                                            if(Number(hour)==0){
+                                                setHour('00')
+                                            }
+                                        }}
+
                                     />     
                                     <Text style={styles.divider}>:</Text>
                                     <SmallInput
                                         maxLength={2}
-                                        onChangeText={setMinute}    
+                                        onChangeText={onChangeMinute}
+                                        value={minute}
+                                        onEndEditing={()=>{
+                                            if(Number(minute)==0){
+                                                setMinute('00')
+                                            }
+                                        }}
+                                        
                                     />
                                 </View>
-                            </View>                   
+                            </View>  
+
                         </View>
                     
                         <View style={[styles.field, {marginBottom: 12}]}>
@@ -185,6 +288,7 @@ export function AppointmentCreate() {
                             autoCorrect={false}
                             onChangeText={setDescription}
                         />
+                        
 
                         <View style={styles.footer}>
                             <Button

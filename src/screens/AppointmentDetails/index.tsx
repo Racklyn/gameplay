@@ -86,11 +86,6 @@ export function AppointmentDetails() {
 
     }
 
-    async function handleDeleteAppointment(){
-        Alert.alert("Delete?")
-        
-    }
-
     function handleOpenGuild() {
         Linking.openURL(widget.instant_invite)
     }
@@ -117,14 +112,10 @@ export function AppointmentDetails() {
                 style={styles.banner}
             >
                 
+                
                 <View style={styles.bannerContent}>
                 
-                    <BorderlessButton
-                        style={styles.deleteButton}
-                        onPress={handleDeleteAppointment}
-                    >
-                        <MaterialIcons name="delete" size={58} color={theme.colors.primary} />
-                    </BorderlessButton>
+                    
                     
                     <Text style={styles.title}>
                         {appointmentSelected.guild.name}
@@ -145,13 +136,14 @@ export function AppointmentDetails() {
                     <>
                         <ListHeader
                             title="Jogadores"
-                            subtitle={`Total `}
+                            subtitle={`Total ${widget.members.length}`}
                         />
 
                         <FlatList
                             data={widget.members}
                             style={styles.members}
                             keyExtractor={item => item.id}
+                            initialNumToRender={7}
                             ItemSeparatorComponent={()=> <ListDivider isCentered/>}
                             renderItem={({item}) => (
                                 <Member

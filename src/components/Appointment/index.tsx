@@ -1,6 +1,5 @@
 import React from 'react';
-import { RectButton, RectButtonProps } from 'react-native-gesture-handler';
-import { View, Text } from 'react-native';
+import { View, Text, TouchableWithoutFeedback, TouchableWithoutFeedbackProps } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
 import { GuildIcon } from '../GuildIcon';
@@ -22,11 +21,12 @@ export type AppointmentProps = {
   description: string;
 }
 
-type Props = RectButtonProps & {
+type Props = TouchableWithoutFeedbackProps & {
   data: AppointmentProps;
+  hasBeenHeld?: boolean;
 } 
 
-export function Appointment({ data, ...rest }: Props) {
+export function Appointment({ data, hasBeenHeld=false, ...rest }: Props) {
     const [category] = categories.filter(item => item.id === data.category);
   
     const {owner} = data.guild
@@ -34,8 +34,9 @@ export function Appointment({ data, ...rest }: Props) {
     const { primary, on , secondary50, secondary70} = theme.colors;
 
     return (
-    <RectButton {...rest}>
-        <View style={styles.container}>
+    <TouchableWithoutFeedback {...rest}>
+        <View style={[styles.container,
+            {backgroundColor: hasBeenHeld ? theme.colors.primaryDark : 'transparent'}]}>
 
             <LinearGradient
                 style={styles.guildIconContainer}
@@ -78,7 +79,7 @@ export function Appointment({ data, ...rest }: Props) {
 
             </View>
         </View>
-    </RectButton>
+    </TouchableWithoutFeedback>
 )
 
 }

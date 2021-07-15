@@ -23,6 +23,7 @@ export const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     right: 24,
+    backgroundColor: '#FFF',
   },
   title: {
     fontSize: 28,

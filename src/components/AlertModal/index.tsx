@@ -1,9 +1,11 @@
-import React, { ReactNode } from 'react';
+import React, {ReactNode} from 'react';
+
 import {
-  View,
-  Modal,
-  ModalProps,
-  TouchableWithoutFeedback
+    View,
+    Text,
+    Modal,
+    ModalProps,
+    TouchableWithoutFeedback
 } from 'react-native';
 
 import { styles } from './styles';
@@ -12,15 +14,16 @@ import { Background } from '../Background';
 
 type Props = ModalProps & {
   children: ReactNode;
+  title?: string;
   closeModal: () => void;
 }
 
-export function ModalView({
-  children,
-  closeModal,
-  ...rest
-}: Props){
-
+export function AlertModal({
+    children,
+    title,
+    closeModal,
+    ...rest
+  }: Props){
   return (
     <Modal
       transparent
@@ -30,10 +33,12 @@ export function ModalView({
     >
       <TouchableWithoutFeedback onPress={closeModal}>
         <View style={styles.overlay}>
-          <View style={styles.container}> 
+          <View style={styles.container}>
             <Background>
-              <View style={styles.bar} />
-              {children}
+                <Text style={styles.title}>{title}</Text>
+                <View style={styles.alertContainer}>
+                  {children}
+                </View>
             </Background>
           </View>
         </View>

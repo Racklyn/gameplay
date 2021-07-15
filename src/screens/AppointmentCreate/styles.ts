@@ -37,6 +37,11 @@ export const styles = StyleSheet.create({
     borderRadius: 8,   
     borderColor: theme.colors.secondary50 
   },
+  isEmptyStyle: {
+    borderColor: theme.colors.primary,
+    borderWidth: 2,
+    borderRadius: 8,
+  },
   field: {
     width: '100%',
     flexDirection: 'row',
@@ -59,7 +64,7 @@ export const styles = StyleSheet.create({
     color: theme.colors.highlight
   },
   footer: {
-    marginVertical: 20,
+    marginTop: 25,
     marginBottom: 56,
   }
 });

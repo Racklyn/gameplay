@@ -4,7 +4,8 @@ import { theme } from '../../global/styles/theme';
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 100
+    marginTop: 100,
+    height: 200
   },
   overlay: {
     flex: 1,

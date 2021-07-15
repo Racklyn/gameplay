@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import {View, FlatList} from 'react-native'
+import {View, FlatList, Alert} from 'react-native'
 
 import { styles } from './styles'
 
@@ -23,10 +23,16 @@ export function Guilds({handleGuildSelect}:Props) {
     },[])
 
     async function fetchGuilds() {
-        const response = await api.get('/users/@me/guilds')
+        try {
+            const response = await api.get('/users/@me/guilds')
 
-        setGuilds(response.data)
-        setLoading(false)
+            setGuilds(response.data)
+            setLoading(false)            
+        } catch (error) {  
+            Alert.alert("Impossível carregar servidores")
+            
+        }
+
     }
 
     return(

@@ -10,9 +10,10 @@ export const styles = StyleSheet.create({
     image:{
         width: '100%',
         height: 360,
+        position: 'absolute'
     },
     content:{
-        marginTop: -40,
+        marginTop: '-22%', // -40
         paddingHorizontal: 50,
         //paddingBottom: 20
     },
