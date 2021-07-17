@@ -5,7 +5,7 @@
 
 O **GamePlay** é um aplicativo para dispositivos móveis voltado para aqueles que gostam de jogar online com os amigos. 
 Foi criado durante a Next Level Week (NLW) Together, evento gratuito desenvolvido pela **[Rocketseat](https://rocketseat.com.br/)**.<br><br>
-O aplicativo permite que o usuário, fazendo login com sua conta do [Discord](https://discord.com/), agende partidas com seus amimgos, nas categorias 
+O aplicativo permite que o usuário, fazendo login com sua conta do [Discord](https://discord.com/), agende partidas com seus amigos, nas categorias 
 **Ranqueada, Duelo 1x1, Diversão e Treino**, possa visualizar os outros usuários que fazem parte de um mesmo servidor o qual ele faz parte, bem com ingressar
 no mesmo e compartilhar o link de convite em outras plataformas, além de outras funcionalidade.
 <br>
